@@ -1,0 +1,45 @@
+/**
+ * Socket.IO — live seat count updates without page refresh.
+ * Backend emits: seatUpdated { eventId, availableSeats }
+ */
+
+const SOCKET_URL = "http://localhost:5000";
+
+let socket = null;
+
+function initSeatSocket() {
+  if (typeof io === "undefined") {
+    console.warn("Socket.IO client not loaded");
+    return;
+  }
+
+  socket = io(SOCKET_URL);
+
+  socket.on("connect", () => {
+    console.log("Socket connected:", socket.id);
+  });
+
+  socket.on("seatUpdated", (payload) => {
+    const { eventId, availableSeats } = payload;
+    if (!eventId) return;
+
+    // Match event card by MongoDB id string
+    const id = String(eventId);
+    const card = document.querySelector(`[data-event-id="${id}"]`);
+    if (!card) return;
+
+    const seatEl = card.querySelector(".available-seats");
+    if (seatEl) {
+      seatEl.textContent = availableSeats;
+    }
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected");
+  });
+}
+
+// Run on events page when DOM is ready
+if (document.getElementById("events-container")) {
+  document.addEventListener("DOMContentLoaded", initSeatSocket);
+}

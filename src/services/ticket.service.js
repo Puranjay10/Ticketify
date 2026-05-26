@@ -1,7 +1,7 @@
 const Ticket=require("../models/ticket.model");
 const Event=require("../models/event.model");
 const QRCode=require("qrcode");
-
+const {getIO}=require("../sockets/socket");
 
 const generateTicketCode=()=>{
     return "TICKET-"+Math.random().toString(36).substring(2,10).toUpperCase();
@@ -24,8 +24,17 @@ const bookTicket=async(eventId,user)=>{
     event.availableSeats-=1;
     await event.save();
 
+    // Emit real-time seat update
+    const io = getIO();
+
+    console.log("Emitting seat update...");
     
-    //Genrate tciket code
+    io.emit("seatUpdated", {
+        eventId: event._id,
+        availableSeats: event.availableSeats,
+    });
+
+    //Genrate ticket code
     const ticketCode=generateTicketCode();
 
     //Generate QR fromticket code
@@ -35,7 +44,7 @@ const bookTicket=async(eventId,user)=>{
     const ticket=await Ticket.create({
         userId:user._id,
         eventId:event._id,
-        ticketCode:generateTicketCode(),
+        ticketCode,
         qrCode,
     });
 

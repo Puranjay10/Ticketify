@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Tickets — Ticketify</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo logo-link">Ticketify</a>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="index.html">Events</a>
+      <a href="tickets.html">My Tickets</a>
+      <a href="#" id="logout-btn" data-nav-auth hidden>Logout</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1 class="page-title">My Tickets</h1>
+    <p id="tickets-loading" class="status-msg loading">Loading tickets...</p>
+    <p id="tickets-error" class="status-msg" hidden></p>
+    <div id="tickets-list"></div>
+
+    <section id="verify-section" class="verify-section" hidden>
+      <h2>Verify ticket <span class="badge-organizer">Organizer</span></h2>
+      <form id="verify-form">
+        <div class="verify-row">
+          <input type="text" id="verify-code" placeholder="Enter ticket code" required>
+          <button type="submit" class="btn">Verify</button>
+        </div>
+        <p id="verify-result" class="status-msg" hidden></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/tickets.js"></script>
+</body>
+</html>

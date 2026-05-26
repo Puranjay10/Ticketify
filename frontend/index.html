@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events — Ticketify</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo logo-link">Ticketify</a>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="index.html">Events</a>
+      <a href="tickets.html">My Tickets</a>
+      <a href="login.html" data-nav-guest>Login</a>
+      <a href="register.html" data-nav-guest>Register</a>
+      <a href="#" id="logout-btn" data-nav-auth hidden>Logout</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1 class="page-title">Events</h1>
+    <p class="page-subtitle">
+      Seat counts update in real time when anyone books (Socket.IO).
+    </p>
+    <p id="events-loading" class="status-msg loading">Loading events...</p>
+    <p id="events-error" class="status-msg" hidden></p>
+    <div id="events-container" class="events-grid"></div>
+  </main>
+
+  <script src="https://cdn.socket.io/4.8.3/socket.io.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/socket.js"></script>
+  <script src="js/events.js"></script>
+</body>
+</html>
