@@ -19,30 +19,28 @@ if (registerForm) {
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-    const role = document.getElementById("role").value;
 
     setButtonLoading(submitBtn, true, "Registering...");
 
     try {
       const res = await apiRequest("/auth/register", {
         method: "POST",
-        body: JSON.stringify({ name, email, password, role }),
+        body: JSON.stringify({ name, email, password }),
       });
 
       // Success — use backend message when present
-      showStatus(
+      showSuccess(
         registerSuccess,
         res.message || "Registration successful",
-        "success"
       );
-      registerForm.querySelectorAll("input, select, button").forEach((el) => {
+      registerForm.querySelectorAll("input, button").forEach((el) => {
         el.disabled = true;
       });
 
       await delay(1500);
       window.location.href = "login.html";
     } catch (err) {
-      showStatus(registerError, err.message, "error");
+      showRequestError(registerError, err, "Registration failed.");
       setButtonLoading(submitBtn, false, "Register");
     }
   });
@@ -83,9 +81,9 @@ if (loginForm) {
         localStorage.setItem("role", res.data.user.role);
       }
 
-      window.location.href = "index.html";
+      window.location.href = "dashboard.html";
     } catch (err) {
-      showStatus(loginError, err.message, "error");
+      showRequestError(loginError, err, "Login failed.");
       setButtonLoading(submitBtn, false, "Login");
     }
   });

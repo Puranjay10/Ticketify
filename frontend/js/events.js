@@ -26,10 +26,10 @@ function renderEventCard(event) {
 
   card.innerHTML = `
     <h3>${escapeHtml(event.title)}</h3>
-    <p class="meta">${escapeHtml(event.venue)}</p>
-    <p class="meta">${formatDate(event.date)}</p>
+    <p class="meta"><i data-lucide="map-pin" class="icon-inline"></i> ${escapeHtml(event.venue)}</p>
+    <p class="meta"><i data-lucide="calendar-days" class="icon-inline"></i> ${formatDate(event.date)}</p>
     <p class="seats">
-      Seats available: <span class="available-seats">${event.availableSeats}</span>
+      <i data-lucide="ticket" class="icon-inline"></i> Seats available: <span class="available-seats">${event.availableSeats}</span>
       / ${event.totalSeats}
     </p>
     <button type="button" class="btn book-btn">Book Ticket</button>
@@ -64,8 +64,11 @@ async function loadEvents() {
     events.forEach((ev) => {
       eventsContainer.appendChild(renderEventCard(ev));
     });
+    if (window.lucide && typeof window.lucide.createIcons === "function") {
+      window.lucide.createIcons();
+    }
   } catch (err) {
-    showStatus(eventsError, err.message, "error");
+    showRequestError(eventsError, err, "Could not load events.");
   } finally {
     if (eventsLoading) eventsLoading.hidden = true;
   }
@@ -89,7 +92,7 @@ async function handleBook(eventId, card) {
 
     const ticket = res.data;
     resultBox.innerHTML = `
-      <strong>Booked!</strong><br>
+      <strong>Ticket booked successfully.</strong><br>
       Ticket code: <code>${escapeHtml(ticket.ticketCode)}</code>
       ${ticket.qrCode ? `<img src="${ticket.qrCode}" alt="Ticket QR code">` : ""}
     `;
@@ -100,7 +103,7 @@ async function handleBook(eventId, card) {
       seatEl.textContent = ticket.eventId.availableSeats;
     }
   } catch (err) {
-    showStatus(bookStatus, err.message, "error");
+    showRequestError(bookStatus, err, "Booking failed.");
   } finally {
     setButtonLoading(bookBtn, false, "Book Ticket");
   }

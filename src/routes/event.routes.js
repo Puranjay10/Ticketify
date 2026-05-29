@@ -4,6 +4,8 @@ const router=express.Router();
 const eventController=require("../controllers/event.controller");
 const protect=require("../middleware/auth.middleware");
 const authorizeRoles=require("../middleware/role.middleware");
+const {createEventValidator}=require("../validators/event.validator");
+const validate=require("../middleware/validation.middleware");
 
 router.get("/",eventController.getEvents);
 router.get("/:id",eventController.getEvent);
@@ -17,6 +19,8 @@ router.post(
     "/",
     protect,
     authorizeRoles("organizer","admin"),
+    createEventValidator,
+    validate,
     eventController.createEvent
 );
 

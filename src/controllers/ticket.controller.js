@@ -1,55 +1,28 @@
 const ticketService=require("../services/ticket.service");
+const asyncHandler=require("express-async-handler");
 
 //Book
-const bookTicket=async(req,res)=>{
-    try{
-        const ticket=await ticketService.bookTicket(
-            req.body.eventId,
-            req.user
-        );
+const bookTicket=asyncHandler(async(req,res)=>{
+    const ticket=await ticketService.bookTicket(req.body.eventId,req.user);
 
         res.status(201).json({
-            message:"Ticket booked successfully",
-            data:ticket,
-        });
-    }catch(error){
-        res.status(400).json({
-            message:error.message,
-        });
-    }
-};
+        message:"Ticket booked successfully",
+        data:ticket,
+    });
+});
 
 //Get my tickets
-const getMyTickets=async(req,res)=>{
-    try{
-        const tickets=await ticketService.getUserTickets(req.user._id);
+const getMyTickets=asyncHandler(async(req,res)=>{
+    const tickets=await ticketService.getUserTickets(req.user._id);
 
-        res.status(200).json({
-            data:tickets,
-        });
-    }catch(error){
-        res.status(200).json({
-            message:error.message,
-        });
-    }
-};
+    res.status(200).json({data:tickets});
+});
 
-const verifyTicket=async(req,res)=>{
-    try{
-        const ticket=await ticketService.verifyTicket(
-            req.body.ticketCode
-        );
+const verifyTicket=asyncHandler(async(req,res)=>{
+    const ticket=await ticketService.verifyTicket(req.body.ticketCode);
 
-        res.status(200).json({
-            message:"Ticket verified successfully",
-            data:ticket,
-        });
-    } catch(error){
-        res.status(400).json({
-            message:error.message,
-        });
-    }
-};
+    res.status(200).json({message:"Ticket verified successfully",data:ticket});
+});
 
 module.exports={
     bookTicket,

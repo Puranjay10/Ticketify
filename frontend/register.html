@@ -6,20 +6,24 @@
   <title>Register — Ticketify</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="register-page">
   <header>
-    <a href="home.html" class="logo logo-link">Ticketify</a>
+    <a href="index.html" class="logo logo-link">Ticketify</a>
     <nav>
-      <a href="home.html">Home</a>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html" data-nav-dashboard hidden>Dashboard</a>
       <a href="login.html" data-nav-guest>Login</a>
-      <a href="index.html" data-nav-auth hidden>Events</a>
+      <a href="events.html" data-nav-auth hidden>Events</a>
+      <a href="tickets.html" data-nav-auth hidden>My Tickets</a>
       <a href="#" id="logout-btn" data-nav-auth hidden>Logout</a>
     </nav>
   </header>
 
-  <main class="container">
-    <div class="auth-card">
+  <main class="container register-shell">
+    <section class="auth-card register-card-wrap">
+      <p class="register-kicker">TICKETIFY</p>
       <h1>Create account</h1>
+      <p class="auth-hint">Create your user account to access events and bookings.</p>
       <form id="register-form">
         <div class="form-group">
           <label for="name">Name</label>
@@ -33,13 +37,6 @@
           <label for="password">Password</label>
           <input type="password" id="password" name="password" required minlength="6" autocomplete="new-password">
         </div>
-        <div class="form-group">
-          <label for="role">Role</label>
-          <select id="role" name="role">
-            <option value="user">user</option>
-            <option value="organizer">organizer</option>
-          </select>
-        </div>
         <button type="submit" class="btn btn-block">Register</button>
         <p id="register-success" class="status-msg" hidden></p>
         <p id="register-error" class="status-msg" hidden></p>
@@ -47,10 +44,11 @@
       <p class="auth-footer">
         Already have an account? <a href="login.html">Log in</a>
       </p>
-    </div>
+    </section>
   </main>
 
   <script src="js/api.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script src="js/utils.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/auth.js"></script>

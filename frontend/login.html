@@ -8,19 +8,22 @@
 </head>
 <body>
   <header>
-    <a href="home.html" class="logo logo-link">Ticketify</a>
+    <a href="index.html" class="logo logo-link">Ticketify</a>
     <nav>
-      <a href="home.html">Home</a>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html" data-nav-dashboard hidden>Dashboard</a>
       <a href="register.html" data-nav-guest>Register</a>
-      <a href="index.html" data-nav-auth hidden>Events</a>
+      <a href="events.html" data-nav-auth hidden>Events</a>
+      <a href="tickets.html" data-nav-auth hidden>My Tickets</a>
       <a href="#" id="logout-btn" data-nav-auth hidden>Logout</a>
     </nav>
   </header>
 
   <main class="container">
     <div class="auth-card">
+      <p class="register-kicker">TICKETIFY</p>
       <h1>Log in</h1>
-      <p class="auth-hint">Email and password only — your role is set by the server.</p>
+      <p class="auth-hint">Access your Ticketify account.</p>
       <form id="login-form">
         <div class="form-group">
           <label for="email">Email</label>
@@ -40,6 +43,7 @@
   </main>
 
   <script src="js/api.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script src="js/utils.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/auth.js"></script>

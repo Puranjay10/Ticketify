@@ -31,6 +31,10 @@ function initSeatSocket() {
     const seatEl = card.querySelector(".available-seats");
     if (seatEl) {
       seatEl.textContent = availableSeats;
+      seatEl.classList.remove("seat-flash");
+      // retrigger minimal highlight animation on each realtime update
+      void seatEl.offsetWidth;
+      seatEl.classList.add("seat-flash");
     }
   });
 

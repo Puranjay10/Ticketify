@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Ticketify</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dashboard-page">
+  <header>
+    <a href="dashboard.html" class="logo logo-link">Ticketify</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html" data-nav-dashboard hidden>Dashboard</a>
+      <a href="events.html" data-nav-auth hidden>Events</a>
+      <a href="tickets.html" data-nav-auth hidden>My Tickets</a>
+      <a href="#organizer-panel" data-nav-organizer hidden>Organizer</a>
+      <a href="login.html" data-nav-guest>Login</a>
+      <a href="register.html" data-nav-guest>Register</a>
+      <a href="#" id="logout-btn" data-nav-auth hidden>Logout</a>
+    </nav>
+  </header>
+
+  <main class="container dashboard-main">
+    <section class="dashboard-hero">
+      <p class="dashboard-kicker">TICKETIFY</p>
+      <div class="dashboard-hero-inner">
+        <div class="dashboard-hero-copy">
+          <h1>Workspace</h1>
+          <p id="dashboard-subtitle" class="dashboard-greeting">Loading your workspace...</p>
+          <span id="dashboard-role" class="dashboard-role-pill" hidden></span>
+        </div>
+        <nav class="dashboard-quick-actions" id="dashboard-user-actions" aria-label="Quick actions">
+          <a href="events.html" class="dashboard-action">
+            <i data-lucide="calendar-days" class="icon-inline"></i>
+            <span>Browse events</span>
+          </a>
+          <a href="tickets.html" class="dashboard-action">
+            <i data-lucide="ticket" class="icon-inline"></i>
+            <span>My tickets</span>
+          </a>
+        </nav>
+        <nav class="dashboard-quick-actions" id="dashboard-organizer-actions" hidden aria-label="Organizer actions">
+          <a href="#organizer-panel" class="dashboard-action">
+            <i data-lucide="calendar-plus" class="icon-inline"></i>
+            <span>Create event</span>
+          </a>
+          <a href="#manage-events-list" class="dashboard-action">
+            <i data-lucide="layout-list" class="icon-inline"></i>
+            <span>Manage events</span>
+          </a>
+          <a href="tickets.html" class="dashboard-action">
+            <i data-lucide="scan-line" class="icon-inline"></i>
+            <span>Verify tickets</span>
+          </a>
+        </nav>
+      </div>
+      <p id="dashboard-status" class="status-msg loading">Loading workspace...</p>
+    </section>
+
+    <section class="dashboard-overview" id="metrics-grid" hidden>
+      <div class="metrics-row">
+        <article class="metric-card">
+          <p class="metric-label">Active events</p>
+          <p class="metric-value" id="metric-events">--</p>
+        </article>
+        <article class="metric-card">
+          <p class="metric-label">Tickets booked</p>
+          <p class="metric-value" id="metric-tickets">--</p>
+        </article>
+        <article class="metric-card metric-card-muted">
+          <p class="metric-label">Seats remaining</p>
+          <p class="metric-value" id="metric-seats">--</p>
+        </article>
+      </div>
+      <div class="live-sync-bar">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span class="live-sync-text">Realtime sync enabled</span>
+        <span class="live-sync-hint">Seat updates stream live via Socket.IO</span>
+      </div>
+    </section>
+
+    <section class="organizer-panel" id="organizer-panel" hidden>
+      <h2 class="organizer-section-title">
+        <i data-lucide="shield-check" class="icon-inline"></i> Organizer tools
+      </h2>
+      <div class="panel-columns">
+        <article class="panel-card">
+          <h3><i data-lucide="calendar-plus" class="icon-inline"></i> Create event</h3>
+          <form id="create-event-form">
+            <div class="form-group">
+              <label for="event-title">Title</label>
+              <input id="event-title" type="text" required>
+            </div>
+            <div class="form-group">
+              <label for="event-description">Description</label>
+              <input id="event-description" type="text" required>
+            </div>
+            <div class="form-group">
+              <label for="event-date">Date</label>
+              <input id="event-date" type="datetime-local" required>
+            </div>
+            <div class="form-group">
+              <label for="event-venue">Venue</label>
+              <input id="event-venue" type="text" required>
+            </div>
+            <div class="form-group">
+              <label for="event-seats">Total seats</label>
+              <input id="event-seats" type="number" min="1" required>
+            </div>
+            <button class="btn btn-block" type="submit">Create Event</button>
+            <p id="create-event-status" class="status-msg" hidden></p>
+          </form>
+        </article>
+
+        <article class="panel-card">
+          <h3><i data-lucide="layout-list" class="icon-inline"></i> Manage events</h3>
+          <p id="manage-events-status" class="status-msg loading">Loading events...</p>
+          <div id="manage-events-list"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

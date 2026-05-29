@@ -10,14 +10,18 @@ const verifySection = document.getElementById("verify-section");
 function renderTicket(ticket) {
   const event = ticket.eventId || {};
   const title = event.title || "Unknown event";
+  const statusValue = (ticket.status || "").toLowerCase();
+  const statusLabel = statusValue === "used" ? "USED / VERIFIED" : "ACTIVE";
   const item = document.createElement("div");
   item.className = "ticket-item";
 
   item.innerHTML = `
-    <h3>${escapeHtml(title)}</h3>
-    <p>Code: <code>${escapeHtml(ticket.ticketCode)}</code></p>
-    <span class="status ${ticket.status}">${escapeHtml(ticket.status)}</span>
-    ${ticket.qrCode ? `<img src="${ticket.qrCode}" alt="Ticket QR">` : ""}
+    <div class="ticket-head">
+      <h3><i data-lucide="ticket" class="icon-inline"></i> ${escapeHtml(title)}</h3>
+      <span class="status ${statusValue}">${escapeHtml(statusLabel)}</span>
+    </div>
+    <p class="ticket-code">Code: <code>${escapeHtml(ticket.ticketCode)}</code></p>
+    ${ticket.qrCode ? `<p class="meta"><i data-lucide="qr-code" class="icon-inline"></i> QR Pass</p><img src="${ticket.qrCode}" alt="Ticket QR">` : ""}
   `;
 
   return item;
@@ -53,8 +57,11 @@ async function loadMyTickets() {
     }
 
     tickets.forEach((t) => ticketsList.appendChild(renderTicket(t)));
+    if (window.lucide && typeof window.lucide.createIcons === "function") {
+      window.lucide.createIcons();
+    }
   } catch (err) {
-    showStatus(ticketsError, err.message, "error");
+    showRequestError(ticketsError, err, "Could not load tickets.");
   } finally {
     if (ticketsLoading) ticketsLoading.hidden = true;
   }
@@ -80,10 +87,10 @@ if (verifyForm) {
         method: "POST",
         body: JSON.stringify({ ticketCode }),
       });
-      showStatus(verifyResult, "Verified successfully.", "success");
+      showSuccess(verifyResult, "Ticket verified successfully.");
       verifyForm.reset();
     } catch (err) {
-      const msg = err.message || "Verification failed";
+      const msg = err?.message || "Verification failed";
       let display = msg;
 
       if (msg.toLowerCase().includes("already used")) {
@@ -92,7 +99,11 @@ if (verifyForm) {
         display = "Invalid ticket — code not found.";
       }
 
-      showStatus(verifyResult, display, "error");
+      if (display !== msg) {
+        showError(verifyResult, display);
+      } else {
+        showRequestError(verifyResult, err, "Verification failed.");
+      }
     } finally {
       setButtonLoading(verifyBtn, false, "Verify");
     }

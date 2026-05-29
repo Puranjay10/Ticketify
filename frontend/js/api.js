@@ -5,6 +5,15 @@
 
 const API_BASE = "http://localhost:5000";
 
+class ApiError extends Error {
+  constructor(message, options = {}) {
+    super(message);
+    this.name = "ApiError";
+    this.validationErrors = options.validationErrors || [];
+    this.status = options.status || null;
+  }
+}
+
 /**
  * Generic fetch wrapper — parses JSON and throws on error responses.
  */
@@ -33,8 +42,25 @@ async function apiRequest(endpoint, options = {}) {
     /* non-JSON body */
   }
 
-  if (!response.ok) {
-    throw new Error(data.message || `Request failed (${response.status})`);
+  const validationErrors = Array.isArray(data.errors)
+    ? data.errors
+        .map((err) => err?.msg)
+        .filter(Boolean)
+    : [];
+
+  const isFailurePayload = data && data.success === false;
+  const hasErrorStatus = !response.ok;
+
+  if (hasErrorStatus || isFailurePayload) {
+    const message =
+      data.message ||
+      validationErrors[0] ||
+      `Request failed (${response.status})`;
+
+    throw new ApiError(message, {
+      validationErrors,
+      status: response.status,
+    });
   }
 
   return data;

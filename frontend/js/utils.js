@@ -25,7 +25,7 @@ const Auth = {
 
   logout() {
     this.clearSession();
-    window.location.href = "home.html";
+    window.location.href = "index.html";
   },
 
   /** Redirect guests away from protected pages. */
@@ -38,7 +38,7 @@ const Auth = {
   },
 
   /** Redirect logged-in users away from login/register. */
-  redirectIfAuthenticated(redirectTo = "index.html") {
+  redirectIfAuthenticated(redirectTo = "dashboard.html") {
     if (this.isLoggedIn()) {
       window.location.href = redirectTo;
       return true;
@@ -79,6 +79,7 @@ function escapeHtml(text) {
 /** Inline status: success | error | loading */
 function showStatus(el, message, type = "error") {
   if (!el) return;
+  el.innerHTML = "";
   el.textContent = message;
   el.className = `status-msg ${type}`;
   el.hidden = !message;
@@ -86,9 +87,47 @@ function showStatus(el, message, type = "error") {
 
 function clearStatus(el) {
   if (!el) return;
+  el.innerHTML = "";
   el.textContent = "";
   el.hidden = true;
   el.className = "status-msg";
+}
+
+function showSuccess(el, message) {
+  showStatus(el, message, "success");
+}
+
+function showError(el, message) {
+  showStatus(el, message, "error");
+}
+
+function showLoading(el, message) {
+  showStatus(el, message, "loading");
+}
+
+function showValidationErrors(el, messages = []) {
+  if (!el) return;
+  const safeMessages = messages.filter(Boolean);
+  if (safeMessages.length === 0) return;
+
+  el.className = "status-msg error";
+  el.hidden = false;
+  el.innerHTML = `<ul class="status-list">${safeMessages
+    .map((msg) => `<li>${escapeHtml(msg)}</li>`)
+    .join("")}</ul>`;
+}
+
+function showRequestError(el, err, fallback = "Something went wrong.") {
+  const validationErrors = Array.isArray(err?.validationErrors)
+    ? err.validationErrors
+    : [];
+
+  if (validationErrors.length > 0) {
+    showValidationErrors(el, validationErrors);
+    return;
+  }
+
+  showError(el, err?.message || fallback);
 }
 
 function setButtonLoading(btn, isLoading, loadingLabel) {

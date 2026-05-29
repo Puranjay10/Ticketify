@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Tickets — Ticketify</title>
+  <title>Events — Ticketify</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
     <nav>
       <a href="index.html">Home</a>
       <a href="dashboard.html" data-nav-dashboard hidden>Dashboard</a>
-      <a href="events.html" data-nav-auth hidden>Events</a>
+      <a href="events.html">Events</a>
       <a href="tickets.html" data-nav-auth hidden>My Tickets</a>
       <a href="dashboard.html#organizer-panel" data-nav-organizer hidden>Organizer</a>
       <a href="login.html" data-nav-guest>Login</a>
@@ -22,27 +22,22 @@
   </header>
 
   <main class="container">
-    <h1 class="page-title">My Tickets</h1>
-    <p id="tickets-loading" class="status-msg loading">Loading tickets...</p>
-    <p id="tickets-error" class="status-msg" hidden></p>
-    <div id="tickets-list"></div>
-
-    <section id="verify-section" class="verify-section" hidden>
-      <h2><i data-lucide="scan-line" class="icon-inline"></i> Verify ticket <span class="badge-organizer">Organizer</span></h2>
-      <form id="verify-form">
-        <div class="verify-row">
-          <input type="text" id="verify-code" placeholder="Enter ticket code" required>
-          <button type="submit" class="btn">Verify</button>
-        </div>
-        <p id="verify-result" class="status-msg" hidden></p>
-      </form>
-    </section>
+    <h1 class="page-title">Events</h1>
+    <p class="page-subtitle">
+      <i data-lucide="radio" class="icon-inline"></i>
+      Seat counts update live when anyone books (Socket.IO).
+    </p>
+    <p id="events-loading" class="status-msg loading">Loading events...</p>
+    <p id="events-error" class="status-msg" hidden></p>
+    <div id="events-container" class="events-grid"></div>
   </main>
 
-  <script src="js/api.js"></script>
+  <script src="https://cdn.socket.io/4.8.3/socket.io.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/api.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/nav.js"></script>
-  <script src="js/tickets.js"></script>
+  <script src="js/socket.js"></script>
+  <script src="js/events.js"></script>
 </body>
 </html>
