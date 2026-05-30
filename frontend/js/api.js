@@ -3,7 +3,10 @@
  * Automatically attaches JWT from localStorage on protected routes.
  */
 
-const API_BASE = "http://localhost:5000";
+const API_BASE =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://ticketify-2f30.onrender.com";
 
 class ApiError extends Error {
   constructor(message, options = {}) {

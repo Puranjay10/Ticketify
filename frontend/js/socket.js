@@ -3,9 +3,12 @@
  * Backend emits: seatUpdated { eventId, availableSeats }
  */
 
-const SOCKET_URL = "http://localhost:5000";
+const SOCKET_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://ticketify-2f30.onrender.com";
 
-let socket = null;
+const socket = io(SOCKET_URL);
 
 function initSeatSocket() {
   if (typeof io === "undefined") {
