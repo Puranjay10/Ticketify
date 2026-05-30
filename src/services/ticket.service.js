@@ -55,22 +55,42 @@ const getUserTickets=async(userId)=>{
     return await Ticket.find({userId}).populate("eventId");
 };
 
-const verifyTicket=async(ticketCode)=>{
-    //find ticket
-    const ticket=await Ticket.findOne({ticketCode});
-    if(!ticket){
+const verifyTicket = async (ticketCode, user) => {
+    // Find ticket
+    const ticket = await Ticket.findOne({ ticketCode });
+
+    if (!ticket) {
         throw new Error("Invalid ticket");
     }
-    //prevent reuse
-    if(ticket.status==="used"){
+
+    // Find associated event
+    const event = await Event.findById(ticket.eventId);
+
+    if (!event) {
+        throw new Error("Event not found");
+    }
+
+    // Ownership check
+    if (
+        event.organizerId.toString() !== user._id.toString() &&
+        user.role !== "admin"
+    ) {
+        throw new Error(
+            "Not authorized to verify tickets for this event"
+        );
+    }
+
+    // Prevent reuse
+    if (ticket.status === "used") {
         throw new Error("Ticket already used");
     }
 
-    //mark as used
-    ticket.status="used";
+    // Mark as used
+    ticket.status = "used";
     await ticket.save();
+
     return ticket;
-}
+};
 
 module.exports={
     bookTicket,

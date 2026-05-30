@@ -44,10 +44,23 @@ const deleteEvent = asyncHandler(async(req, res) => {
     res.status(200).json(result);
 });
 
+
+//get events of organizer
+const getMyEvents=asyncHandler(async(req,res)=>{
+    const events=await eventService.getOrganizerEvents(
+        req.user._id
+    );
+
+    res.status(200).json({
+        data:events,
+    });
+});
+
 module.exports = {
   createEvent,
   getEvents,
   getEvent,
   updateEvent,
   deleteEvent,
+  getMyEvents,
 };

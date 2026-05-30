@@ -8,6 +8,14 @@ const {createEventValidator}=require("../validators/event.validator");
 const validate=require("../middleware/validation.middleware");
 
 router.get("/",eventController.getEvents);
+
+router.get(
+    "/my-events",
+    protect,
+    authorizeRoles("organizer", "admin"),
+    eventController.getMyEvents
+);
+
 router.get("/:id",eventController.getEvent);
 
 router.get("/test", (req, res) => {

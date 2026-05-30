@@ -10,7 +10,7 @@ const createEvent=async(data,user)=>{
 };
 
 const getAllEvents=async()=>{
-    return await Event.find().sort({ createdAt: -1 }); // ✅
+    return await Event.find().sort({ createdAt: -1 }); 
 };
 
 const getEventById=async(id)=>{
@@ -25,6 +25,11 @@ const getEventById=async(id)=>{
 
 const updateEvent=async(id,data,user)=>{
     const event=await Event.findById(id);
+    
+    if (!event) {
+    throw new Error("Event not found");
+    }
+    
     if (
         event.organizerId.toString() !== user._id.toString() &&
         user.role !== "admin"
@@ -57,10 +62,18 @@ const deleteEvent = async (id, user) => {
   return { message: "Event deleted successfully" };
 };
 
+
+const getOrganizerEvents=async(userId)=>{
+    return await Event.find({
+        organizerId: userId,
+    }).sort({createdAt: -1});
+};
+
 module.exports = {
   createEvent,
   getAllEvents,
   getEventById,
   updateEvent,
   deleteEvent,
+  getOrganizerEvents,
 };

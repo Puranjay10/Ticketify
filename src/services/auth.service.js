@@ -11,7 +11,7 @@ const generateToken=(user)=>{
 };
 
 const registerUser=async(data)=>{
-    const{name,email,password,role}=data;
+    const{name,email,password}=data;
 
     const existinguser=await User.findOne({email});
     if(existinguser){
@@ -24,7 +24,7 @@ const registerUser=async(data)=>{
         name,
         email,
         password:hashedPassword,
-        role:role || "user",
+        role: "user",
     });
 
     return{
