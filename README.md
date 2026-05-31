@@ -1,6 +1,6 @@
 # 🎟️ Ticketify
 
-A full-stack event ticketing platform that enables users to discover events, register accounts, book tickets, and manage their event participation through a seamless web experience.
+A full-stack event ticketing platform that enables users to discover events, create and manage events, book tickets, and verify attendance through QR-based ticket validation and real-time seat updates.
 
 ## 🚀 Live Demo
 
@@ -12,40 +12,57 @@ A full-stack event ticketing platform that enables users to discover events, reg
 
 ## 📌 Overview
 
-Ticketify is a web-based event management and ticket booking platform designed to simplify the process of organizing and attending events.
+Ticketify is a modern event management and ticket booking platform built using a full-stack JavaScript architecture.
 
-The platform provides secure user authentication, event creation and management, ticket booking, and real-time updates. It follows a modern client-server architecture with a Node.js backend, MongoDB database, and a responsive frontend built using HTML, CSS, and JavaScript.
+The platform supports secure authentication, role-based access control, event management, ticket booking, QR-code ticket generation, organizer-side ticket verification, and real-time seat availability updates using Socket.IO.
+
+Designed with scalability and maintainability in mind, Ticketify follows a layered backend architecture consisting of controllers, services, middleware, and database models.
 
 ---
 
 ## ✨ Features
 
-### User Authentication
+### 🔐 Authentication & Authorization
 
 * User registration and login
 * JWT-based authentication
-* Secure password handling
-* Protected routes for authenticated users
+* Secure password hashing using bcrypt
+* Protected routes
+* Role-Based Access Control (RBAC)
+* User, Organizer, and Admin roles
+* Backend-enforced role authorization
 
-### Event Management
+### 🎉 Event Management
 
-* Create new events
-* View available events
-* Manage event details
-* Track seat availability
+* Create events (Organizer/Admin)
+* Update event details
+* Delete events
+* Browse all available events
+* View organizer-specific events
+* Event ownership validation
+* Seat availability tracking
 
-### Ticket Booking
+### 🎫 Ticket Management
 
 * Book tickets for events
-* Prevent overbooking
-* Manage ticket records
-* View booked tickets
+* Prevent booking for expired events
+* Automatic seat deduction
+* Ticket history management
+* QR-code ticket generation
+* Unique ticket codes
 
-### Real-Time Communication
+### ✅ Ticket Verification
+
+* Organizer/Admin ticket verification
+* QR-code based validation workflow
+* Duplicate ticket usage prevention
+* Event ownership verification during validation
+
+### ⚡ Real-Time Updates
 
 * Socket.IO integration
-* Instant event-related updates
-* Improved user experience through live interactions
+* Live seat availability updates
+* Real-time event synchronization
 
 ---
 
@@ -69,9 +86,10 @@ The platform provides secure user authentication, event creation and management,
 
 ### Authentication
 
-* JSON Web Tokens (JWT)
+* JSON Web Token (JWT)
+* bcrypt
 
-### Real-Time Features
+### Real-Time Communication
 
 * Socket.IO
 
@@ -83,44 +101,38 @@ The platform provides secure user authentication, event creation and management,
 
 ---
 
-## 🏗️ System Architecture
-
-Frontend (Vercel)
-↓
-REST API Requests
-↓
-Express.js Backend (Render)
-↓
-MongoDB Atlas Database
-
----
-
-## 📂 Project Structure
+## 🏗️ Architecture
 
 ```text
-Ticketify/
-│
-├── frontend/
-│   ├── css/
-│   ├── js/
-│   ├── index.html
-│   ├── login.html
-│   ├── register.html
-│   └── ...
-│
-├── src/
-│   ├── config/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── sockets/
-│   └── server.js
-│
-├── .env
-├── package.json
-└── README.md
+Frontend (Vercel)
+      │
+      ▼
+REST API + Socket.IO
+      │
+      ▼
+Express.js Backend (Render)
+      │
+      ▼
+MongoDB Atlas
 ```
+
+### Backend Structure
+
+```text
+src/
+├── controllers/
+├── services/
+├── routes/
+├── middleware/
+├── models/
+├── validators/
+├── sockets/
+└── server.js
+```
+
+The backend follows a layered architecture separating business logic, routing, validation, authentication, and database operations.
+
+---
 
 ## 🔧 Installation
 
@@ -138,8 +150,6 @@ npm install
 ```
 
 ### Configure Environment Variables
-
-Create a `.env` file in the root directory:
 
 ```env
 MONGO_URI=your_mongodb_connection_string
@@ -168,12 +178,15 @@ npm start
 ```http
 POST /auth/register
 POST /auth/login
+GET  /auth/profile
 ```
 
 ### Events
 
 ```http
 GET    /events
+GET    /events/:id
+GET    /events/my-events
 POST   /events
 PUT    /events/:id
 DELETE /events/:id
@@ -182,21 +195,22 @@ DELETE /events/:id
 ### Tickets
 
 ```http
-GET    /tickets
-POST   /tickets/book
+POST /tickets/book
+GET  /tickets/my
+POST /tickets/verify
 ```
 
 ---
 
 ## 🌐 Deployment
 
-The application is deployed using a modern cloud-native architecture:
+Ticketify is deployed using a cloud-native architecture:
 
 * Frontend hosted on Vercel
 * Backend hosted on Render
 * Database hosted on MongoDB Atlas
 
-This setup ensures scalability, reliability, and easy maintenance.
+This deployment setup enables easy scalability and independent frontend/backend deployments.
 
 ---
 
@@ -204,11 +218,11 @@ This setup ensures scalability, reliability, and easy maintenance.
 
 * Payment Gateway Integration
 * Email Notifications
-* Event Categories and Search
-* Admin Dashboard
-* QR Code Based Ticket Validation
-* Analytics and Reporting
-* Role-Based Access Control
+* Event Categories & Search
+* Analytics Dashboard
+* Redis-based Seat Locking
+* Automated Testing Pipeline
+* Advanced Admin Controls
 
 ---
 
