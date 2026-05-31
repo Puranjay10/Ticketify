@@ -15,6 +15,10 @@ const bookTicket=async(eventId,user)=>{
         throw new Error("Event not found");
     }
 
+    if (new Date(event.date) < new Date()) {
+    throw new Error("Event has already ended");
+    }
+    
     //Check seat availiblity
     if(event.availableSeats<=0){
         throw new Error("No seats available");
