@@ -69,6 +69,10 @@ const getOrganizerEvents=async(userId)=>{
     }).sort({createdAt: -1});
 };
 
+const update=async()=>{
+    //if this is ok 
+}
+
 module.exports = {
   createEvent,
   getAllEvents,
