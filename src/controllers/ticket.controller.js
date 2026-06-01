@@ -19,7 +19,10 @@ const getMyTickets=asyncHandler(async(req,res)=>{
 });
 
 const verifyTicket=asyncHandler(async(req,res)=>{
-    const ticket=await ticketService.verifyTicket(req.body.ticketCode);
+    const ticket=await ticketService.verifyTicket(
+        req.body.ticketCode,
+        req.user
+    );
 
     res.status(200).json({message:"Ticket verified successfully",data:ticket});
 });
